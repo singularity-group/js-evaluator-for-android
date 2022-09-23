@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.util.Base64;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -50,10 +49,6 @@ public class WebViewWrapper implements WebViewWrapperInterface {
 			mWebView.removeJavascriptInterface(JsEvaluator.JS_NAMESPACE);
 			mWebView.loadUrl("about:blank");
 			mWebView.stopLoading();
-
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-				mWebView.freeMemory();
-			}
 
 			mWebView.clearHistory();
 			mWebView.removeAllViews();
