@@ -1,4 +1,7 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish' // Publishing code taken from https://stackoverflow.com/a/42160584
+}
 
 android {
     compileSdkVersion 31
@@ -8,8 +11,8 @@ android {
         minSdkVersion 23
         targetSdkVersion 31
         versionCode 1
-        versionName "1.0"
-        version="1.0"
+        versionName "cc8c7fe371"
+        version="cc8c7fe371"
         archivesBaseName = "jsevaluator"
         consumerProguardFiles 'consumer-proguard-rules.pro'
     }
@@ -26,8 +29,37 @@ android {
             }
         }
     }
+    publishing {
+        singleVariant("release") {
+            // if you don't want sources/javadoc, remove these lines
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
     implementation 'androidx.annotation:annotation:1.4.0'
+}
+
+// To publish, run ./gradlew :jsevaluator:publishAllPublicationsToMyrepoRepository
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId 'com.github.singularity-group'
+                artifactId 'js-evaluator-for-android'
+                version = android.defaultConfig.versionName
+            }
+        }
+        repositories {
+            repositories {
+                maven {
+                    name = 'myrepo'
+                    url = "${project.buildDir}/repo"
+                }
+            }
+        }
+    }
 }
